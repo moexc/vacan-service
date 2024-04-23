@@ -1,0 +1,61 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /vcs
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.26.83.193:3306/vacan?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
+    username: root
+    password: qixinbaotest
+  jpa:
+    open-in-view: false
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    timeout: 10000
+    jedis:
+      pool:
+        max-active: 30
+        max-wait: 10000
+        max-idle: 10
+        min-idle: 5
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+rocketmq:
+  name-server: 172.26.82.175:9876
+  producer:
+    group: vcs
+
+auth:
+  timeout: 1800
+
+log-path: /home/moexc/ramfs
+
+alipay:
+  serverUrl: https://openapi.alipaydev.com/gateway.do
+  appId: 2016102700771334
+  privateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCBqGjCFKaKB9XDPJlQxgK4uaT5fmoNz9/N2Wt8UHE1fRfn19eO/EgHLFRK7r52Usc1BUmd/mZ3zgOGjh2ABZwy3jtscV2IoYTYMMPo/2ugLuIm1mfRvE81aH5Pq2008E8O7KucnsUF3rxY1/V9k/01jC5foEol9QFa5vEqv/lj7PM/KCs0vGe+TOyrppaqAAoNnq8iY9t1HymmScVTgoay03UxVXSqwPYFX+rXlFcuorBeHf/+Byi6URHYBnlLODIdDpNrOYS+H423kSlcH6wi0C4iaWXdXKJvUzTrBh0faryginu85oZxQLpax2/Ru6v2rfxi6m4lRS1R6P7vSex7AgMBAAECggEAPi1Ir2m/w4mmVQ4GZ9nNDFDacFrS+PSq2shc5yycXY4znJbBZGxPDkGP2q9K3usrZJ24g++vq9w7jJcyRmZqVWqFDKgAtrjeP96C1IVIU3SoNv+yob2wLmiByirnH+/tubZ9RYpN6Va688/8hdAmKTukMW9on3MyxyjgliOhsO0NjUkTsr2awc15kYCM+YwyEagxG6+xyax7fH5G5pZPZpy/7txD3udFGIHG5k3wPJOXD9rNczsF0awSZOAntG2lzplH6JAazLoNJfEqvoHcfShH+vfZjl8BYsfGnTxnNhgX8TN/vKP/UClh5BsXvFO6Y4kA439DK1zPLqA+W9ZU4QKBgQC9HoRXoJ4psEX/9U0rL7uD2mTWsQJj45oy4V7HmQZ5pmg0nh69z2ziUZvZlAZLciz4To4rbYlyH42kA95I4uR1pIxyHyPjYTbH8PeD19LH4nE+5LYoacr00pijYuirI0k5iCrx+GcfzhlOeWv4FA1XPrWTxtFGfzIiQzl3MXWyXwKBgQCvgrEMA0dZZXGaxp+Msc+ne/bNCkA4k1NU2/jPnge/hwZ8mFPacYpToXa4vJ/QrSXDwyxpJ/7ULwfRp02GGDIoers6AyHi8c3Px1Sp+7W//sazQ05DTFXThgq+EEjwarilMs1VTwpM1KxwTKSmLPRLu10mZfHvv56B/N4lzFKTZQKBgQCgYXLmRSYcQIr8h/DLgQ1KwjjmAPL/9xLbt1iDeHiPTdntVXLIkVHLlF3Q5MF51ffhE+1pUtlO2QdrYoRt10zbn5IjbdkniVfFs8qUGsF8FcLoDVmVaDJf8QDU/ppGGASPL7ULwxbhWA0KCdrQZWDy7hFaoy7y1AeWGuBu/pjLjQKBgGJ8zC0Zieg4bM+VteKVxRkPDydwISmeQpzT84NOArsPYix4rlVecWkMqjpwXp4TC6YW180KjI009wZHA9HDsiHU/UtIhrN7TSrTiEb64LqklYvysPBC3cac6VpOeR+wQ30wTNkaSYVjsoAyAhLeFxiIQ3VQr7sBpEj9RQug5JWhAoGBAKVYRqMVV14syNxM3Z7hREZ/e25CRqdtUkESeLv1L88BmVmGPSLsgYsZ333G7O3zQ7JSvHVyYZpL6W01JKlTMtlOE3qLRwUxFI+mg3un2sIlK1iGJ3RalL42c05qSWEA/HhdbnIRkotrGoLwSj3nsxzf4NBRfqxf/wUTVUkuY9s6
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnPSD7PFh0I5g/9g7iKGB14ETznNQLm2o3hXkyFWu/70Mh5DOoMvXB/0IGOlr0Z0eCtSKOq40eqmllohegwShSLnF3nuNEIhConfL2qln19sFT9BzcgFsTTRq/6Y09hJ+IaJTs97imBLqIir0j5g0bfwt4dEeztFsQP5ZwEbmcEXprufdOH/982nw2CiYG5mFlVIq0mDGFIXSWYzNayI2uPaE+VyQSatO66sfXLq865Yu0NQEU6xi4synFD+k5uo7HpTs5kQz3OiFkruO//0CqVxO8sCHH18qnrNGmA01A+vbW33qrgwUq/30jH2o6mWt7puSYxwlhZ9AcXS11pLg6wIDAQAB
+  format: json
+  charset: utf-8
+  signType: RSA2
+  notifyUrl: http://dj9a3w.natappfree.cc/vcs/api/pay/async
+
+bid:
+  engine-server: http://localhost:8081/bid
+  method-create: /api/trade
+  result-accept-uri: http://localhost:8080/vcs/api/trade/result
+
+order:
+  pay-timeout: 15m
+
+cron:
+  order:
+    timeout-scan: 0 0/1 * * * ?

@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:mysql://172.16.20.147:3306/vacan?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
+    username: qxb
+    password: 8Ts%$!yH@8aLHoQC
