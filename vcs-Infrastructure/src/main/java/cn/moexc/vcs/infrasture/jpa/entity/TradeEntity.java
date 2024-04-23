@@ -23,19 +23,19 @@ public class TradeEntity implements Serializable {
      * 专场ID
      */
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private String id;
 
     /**
      * 专场名称
      */
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     /**
      * 开始时间
      */
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time")
     private Date startTime;
 
     /**
@@ -47,13 +47,19 @@ public class TradeEntity implements Serializable {
     /**
      * 状态
      */
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status;
 
     /**
      * 发送竞价引擎状态
      */
-    @Column(name = "send_status", nullable = false)
+    @Column(name = "send_status")
     private String sendStatus;
+
+    /**
+     * 标的数
+     */
+    @Column(name = "bid_count")
+    private Integer bidCount;
 
 }

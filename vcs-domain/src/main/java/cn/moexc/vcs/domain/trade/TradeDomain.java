@@ -37,6 +37,11 @@ public class TradeDomain {
      */
     private String sendStatus;
 
+    /**
+     * 标的数
+     */
+    private Integer bidCount;
+
     private List<BidDomain> bidDomains;
 
     public String createTrade(CreateTradeCommand command){
@@ -59,6 +64,8 @@ public class TradeDomain {
             bidEntity.setBidStatus("0");
             return bidEntity;
         }).collect(Collectors.toList());
+
+        this.bidCount = this.bidDomains.size();
 
         return this.id;
     }

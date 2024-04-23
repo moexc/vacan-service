@@ -37,6 +37,11 @@ public class TradeVO {
      */
     private String sendStatus;
 
+    /**
+     * 标的数
+     */
+    private Integer bidCount;
+
     public static TradeVO gen(TradeEntity entity){
         TradeVO vo = new TradeVO();
         vo.setId(entity.getId());
@@ -66,6 +71,7 @@ public class TradeVO {
         }else{
             vo.setSendStatus("未知");
         }
+        vo.setBidCount(entity.getBidCount());
         return vo;
     }
 
