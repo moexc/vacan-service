@@ -1,6 +1,7 @@
 package cn.moexc.vcs.service.dto;
 
-import cn.moexc.vcs.domain.trade.CreateTradeCommand;
+import cn.moexc.vcs.infrasture.jpa.entity.TradeBidEntity;
+import cn.moexc.vcs.infrasture.jpa.entity.TradeEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,12 +9,13 @@ import lombok.Setter;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-public class CreateTradeDTO {
+public class TradeDTO {
     /**
      * 名称
      */
@@ -28,7 +30,7 @@ public class CreateTradeDTO {
     /**
      * 标的
      */
-    private List<CreateTradeCommand.Bid> bids;
+    private List<Bid> bids;
 
     @Getter
     @Setter
@@ -62,5 +64,23 @@ public class CreateTradeDTO {
         @NotBlank(message = "参数不可为空：标的竞价幅度")
         @Min(value = 0, message = "标的竞价幅度不可小于0")
         private BigDecimal bidPrice;
+    }
+
+    public static TradeDTO gen(TradeEntity tradeEntity, List<TradeBidEntity> tradeBidEntities){
+        TradeDTO tradeDTO = new TradeDTO();
+        tradeDTO.setTradeName(tradeEntity.getName());
+        tradeDTO.setStartTime(tradeEntity.getStartTime());
+        List<Bid> bids = new ArrayList<>();
+        tradeBidEntities.forEach(tradeBidEntity -> {
+            Bid bid = new Bid();
+            bid.setName(tradeBidEntity.getName());
+            bid.setCountDown(tradeBidEntity.getCountDown());
+            bid.setResetCd(tradeBidEntity.getResetCd());
+            bid.setStartPrice(tradeBidEntity.getStartPrice());
+            bid.setBidPrice(tradeBidEntity.getBidPrice());
+            bids.add(bid);
+        });
+        tradeDTO.setBids(bids);
+        return tradeDTO;
     }
 }

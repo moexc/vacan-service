@@ -1,16 +1,21 @@
 package cn.moexc.vcs.service;
 
+import cn.moexc.vcs.domain.AlterException;
 import cn.moexc.vcs.domain.trade.CreateTradeCommand;
 import cn.moexc.vcs.domain.trade.TradeDomain;
 import cn.moexc.vcs.domain.trade.TradeDomainRepository;
+import cn.moexc.vcs.domain.trade.UpdateTradeCommand;
 import cn.moexc.vcs.domain.trade.engine.BidEnginePort;
 import cn.moexc.vcs.domain.trade.engine.CreateDtoFactory;
 import cn.moexc.vcs.domain.trade.engine.Engine4CreateDTO;
+import cn.moexc.vcs.infrasture.jpa.entity.TradeBidEntity;
 import cn.moexc.vcs.infrasture.jpa.entity.TradeEntity;
+import cn.moexc.vcs.infrasture.jpa.repository.TradeBidEntityRepository;
 import cn.moexc.vcs.infrasture.jpa.repository.TradeEntityRepository;
 import cn.moexc.vcs.service.cmdfactory.AcceptTradeResultCommandFactory;
 import cn.moexc.vcs.service.cmdfactory.CreateTradeCmdFactory;
-import cn.moexc.vcs.service.dto.CreateTradeDTO;
+import cn.moexc.vcs.service.cmdfactory.UpdateTradeCmdFactory;
+import cn.moexc.vcs.service.dto.TradeDTO;
 import cn.moexc.vcs.service.dto.SearchTradeDTO;
 import cn.moexc.vcs.service.dto.TradeResultDTO;
 import cn.moexc.vcs.service.vo.PageResult;
@@ -37,13 +42,16 @@ public class TradeService {
     private final TradeDomainRepository tradeDomainRepository;
     private final BidEnginePort bidEnginePort;
     private final TradeEntityRepository tradeEntityRepository;
+    private final TradeBidEntityRepository tradeBidEntityRepository;
 
     public TradeService(TradeDomainRepository tradeDomainRepository,
                         @Qualifier("bidEnginePort4RocketMQImpl") BidEnginePort bidEnginePort,
-                        TradeEntityRepository tradeEntityRepository) {
+                        TradeEntityRepository tradeEntityRepository,
+                        TradeBidEntityRepository tradeBidEntityRepository) {
         this.tradeDomainRepository = tradeDomainRepository;
         this.bidEnginePort = bidEnginePort;
         this.tradeEntityRepository = tradeEntityRepository;
+        this.tradeBidEntityRepository = tradeBidEntityRepository;
     }
 
     public PageResult<TradeVO> list(SearchTradeDTO searchTradeDTO, Integer page, Integer rows) {
@@ -81,12 +89,26 @@ public class TradeService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String create(CreateTradeDTO createTradeDTO){
-        CreateTradeCommand command = CreateTradeCmdFactory.gen(createTradeDTO);
+    public String create(TradeDTO tradeDTO){
+        CreateTradeCommand command = CreateTradeCmdFactory.gen(tradeDTO);
         TradeDomain tradeDomain = new TradeDomain();
         String tradeId = tradeDomain.createTrade(command);
         tradeDomainRepository.save(tradeDomain);
         return tradeId;
+    }
+
+    public TradeDTO detail(String tradeId){
+         TradeEntity tradeEntity = tradeEntityRepository.findById(tradeId).orElseThrow(() -> new AlterException("未获取到专场信息！"));
+        List<TradeBidEntity> tradeBidEntities = tradeBidEntityRepository.findAllByTradeIdOrderByNumberAsc(tradeId);
+        return TradeDTO.gen(tradeEntity, tradeBidEntities);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void update(String tradeId, TradeDTO tradeDTO) {
+        TradeDomain tradeDomain = tradeDomainRepository.byId(tradeId);
+        UpdateTradeCommand command = UpdateTradeCmdFactory.gen(tradeDTO);
+        tradeDomain.updateTrade(command);
+        tradeDomainRepository.save(tradeDomain);
     }
 
     @Transactional(rollbackFor = Exception.class)

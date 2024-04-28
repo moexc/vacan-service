@@ -36,6 +36,9 @@ public class TradeDomainRepositoryImpl implements TradeDomainRepository {
         TradeEntity tradeEntity = new TradeEntity();
         List<TradeBidEntity> tradeBidEntities = new ArrayList<>();
         TradeDomainFactory.genEntity(domain, tradeEntity, tradeBidEntities);
+        if (tradeEntityRepository.existsById(domain.getId())){
+            delete(domain.getId());
+        }
         tradeEntityRepository.save(tradeEntity);
         tradeBidEntityRepository.saveAll(tradeBidEntities);
     }

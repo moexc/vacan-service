@@ -70,6 +70,29 @@ public class TradeDomain {
         return this.id;
     }
 
+    public void updateTrade(UpdateTradeCommand command){
+        this.name = command.getName();
+        this.startTime = command.getStartTime();
+        this.status = "0";
+        this.sendStatus = "0";
+
+        this.bidDomains = command.getBids().stream().map(bid -> {
+            BidDomain bidEntity = new BidDomain();
+            bidEntity.setId(Utils.genUUID());
+            bidEntity.setTradeId(this.id);
+            bidEntity.setName(bid.getName());
+            bidEntity.setCountDown(bid.getCountDown());
+            bidEntity.setResetCd(bid.getResetCd());
+            bidEntity.setStatus("0");
+            bidEntity.setStartPrice(bid.getStartPrice());
+            bidEntity.setBidPrice(bid.getBidPrice());
+            bidEntity.setBidStatus("0");
+            return bidEntity;
+        }).collect(Collectors.toList());
+
+        this.bidCount = this.bidDomains.size();
+    }
+
     public void sended(boolean sendIsSuccess){
         this.sendStatus = sendIsSuccess ? "1" : "2";
     }
