@@ -1,6 +1,5 @@
 package cn.moexc.vcs.infrasture.jpa.entity.queryresult;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,15 +14,21 @@ public class GoodsSimple {
     private String subdescr;
     private BigDecimal origPrice;
     private BigDecimal price;
-    private BigDecimal quantity;
+    private Integer quantity;
+    private String status;
 
     public GoodsSimple(String id, String title, String photo, String subdescr, BigDecimal origPrice, BigDecimal price, Integer quantity) {
+        this(id, title, photo, subdescr, origPrice, price, quantity, null);
+    }
+
+    public GoodsSimple(String id, String title, String photo, String subdescr, BigDecimal origPrice, BigDecimal price, Integer quantity, String status) {
         this.id = id;
         this.title = title;
         this.photo = photo;
         this.subdescr = subdescr;
         this.origPrice = origPrice;
         this.price = price;
-        this.quantity = new BigDecimal(quantity);
+        this.quantity = quantity;
+        this.status = status;
     }
 }

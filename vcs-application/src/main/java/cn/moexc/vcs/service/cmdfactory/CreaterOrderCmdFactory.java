@@ -11,10 +11,10 @@ public class CreaterOrderCmdFactory {
         cmd.setCustomerId(cid);
         cmd.setQuantity(createOrderDTO.getQuantity());
         cmd.setAddress(createOrderDTO.getAddress());
-        cmd.setGoodsId(createOrderDTO.getShopId());
         if (goods4CreateOrder == null){
             return cmd;
         }
+        cmd.setGoodsId(goods4CreateOrder.getGoodsId());
         cmd.setTitle(goods4CreateOrder.getTitle());
         cmd.setPhoto(goods4CreateOrder.getPhoto());
         cmd.setPrice(goods4CreateOrder.getPrice());

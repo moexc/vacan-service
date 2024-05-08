@@ -16,7 +16,8 @@ public class GoodsVO4Simple {
     private String subdescr;
     private BigDecimal origPrice;
     private BigDecimal price;
-    private BigDecimal quantity;
+    private Integer quantity;
+    private String status;
 
     public static GoodsVO4Simple gen(GoodsSimple goodsSimple){
         GoodsVO4Simple result = new GoodsVO4Simple();
@@ -27,6 +28,7 @@ public class GoodsVO4Simple {
         result.setOrigPrice(goodsSimple.getOrigPrice());
         result.setPrice(goodsSimple.getPrice());
         result.setQuantity(goodsSimple.getQuantity());
+        result.setStatus(goodsSimple.getStatus());
         return result;
     }
 
