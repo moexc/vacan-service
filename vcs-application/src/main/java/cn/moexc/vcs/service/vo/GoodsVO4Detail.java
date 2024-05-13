@@ -18,6 +18,7 @@ public class GoodsVO4Detail {
     private BigDecimal price;
     private BigDecimal quantity;
     private String status;
+    private Long createTime;
 
     public static GoodsVO4Detail gen(GoodsDetail goodsDetail){
         GoodsVO4Detail result = new GoodsVO4Detail();
@@ -30,6 +31,7 @@ public class GoodsVO4Detail {
         result.setPrice(goodsDetail.getPrice());
         result.setQuantity(goodsDetail.getQuantity());
         result.setStatus(goodsDetail.getStatus());
+        result.setCreateTime(goodsDetail.getCreateTime().getTime());
         return result;
     }
 

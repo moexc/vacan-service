@@ -22,9 +22,10 @@ public class MinioOSS implements ObjectStorageService {
     }
 
     @Override
-    public void write(String name, InputStream inputStream) throws Exception{
+    public String write(String name, InputStream inputStream) throws Exception{
         if (!bucketExists()) makeBucket();
         minioClient.putObject(bucketName, name, inputStream, new PutObjectOptions(inputStream.available(), -1));
+        return getUrl(name);
     }
 
     @Override

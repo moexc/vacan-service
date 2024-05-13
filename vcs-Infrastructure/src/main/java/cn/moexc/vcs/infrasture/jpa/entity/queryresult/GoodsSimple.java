@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -16,12 +17,10 @@ public class GoodsSimple {
     private BigDecimal price;
     private Integer quantity;
     private String status;
+    private Date createTime;
 
-    public GoodsSimple(String id, String title, String photo, String subdescr, BigDecimal origPrice, BigDecimal price, Integer quantity) {
-        this(id, title, photo, subdescr, origPrice, price, quantity, null);
-    }
 
-    public GoodsSimple(String id, String title, String photo, String subdescr, BigDecimal origPrice, BigDecimal price, Integer quantity, String status) {
+    public GoodsSimple(String id, String title, String photo, String subdescr, BigDecimal origPrice, BigDecimal price, Integer quantity, String status, Date createTime) {
         this.id = id;
         this.title = title;
         this.photo = photo;
@@ -30,5 +29,6 @@ public class GoodsSimple {
         this.price = price;
         this.quantity = quantity;
         this.status = status;
+        this.createTime = createTime;
     }
 }

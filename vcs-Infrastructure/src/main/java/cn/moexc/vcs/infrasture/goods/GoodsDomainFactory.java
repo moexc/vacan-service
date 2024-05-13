@@ -12,7 +12,7 @@ public class GoodsDomainFactory {
         domain.setTitle(entity.getTitle());
         domain.setPhoto(entity.getPhoto());
         domain.setSubdescr(entity.getSubdescr());
-        domain.setDetail(new String(entity.getDetail(), StandardCharsets.UTF_8));
+        domain.setDetail(entity.getDetail());
         domain.setClassify(entity.getClassify());
         domain.setOrigPrice(entity.getOrigPrice());
         domain.setPrice(entity.getPrice());
@@ -27,7 +27,7 @@ public class GoodsDomainFactory {
         entity.setTitle(domain.getTitle());
         entity.setPhoto(domain.getPhoto());
         entity.setSubdescr(domain.getSubdescr());
-        entity.setDetail(domain.getDetail().getBytes(StandardCharsets.UTF_8));
+        entity.setDetail(domain.getDetail());
         entity.setClassify(domain.getClassify());
         entity.setOrigPrice(domain.getOrigPrice());
         entity.setPrice(domain.getPrice());

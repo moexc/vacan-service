@@ -25,10 +25,12 @@ public interface GoodsEntityRepository extends JpaRepository<GoodsEntity, String
             "g.subdescr, " +
             "g.origPrice, " +
             "g.price, " +
-            "g.quantity" +
+            "g.quantity, " +
+            "g.status, " +
+            "g.createTime " +
             ") from GoodsEntity g " +
             "where g.status = '03' " +
-            "order by g.quantity desc")
+            "order by g.createTime desc")
     List<GoodsSimple> todayStar();
 
     @Query("select " +
@@ -40,13 +42,14 @@ public interface GoodsEntityRepository extends JpaRepository<GoodsEntity, String
             "g.origPrice, " +
             "g.price, " +
             "g.quantity, " +
-            "g.status" +
+            "g.status, " +
+            "g.createTime " +
             ") " +
             "from GoodsEntity g " +
-            "order by g.quantity desc")
+            "order by g.createTime desc")
     Page<GoodsSimple> selectGoods(Pageable pageable);
 
-    @Query("select new cn.moexc.vcs.infrasture.jpa.entity.queryresult.GoodsDetail(id, title, photo, subdescr, detail, origPrice, price, quantity, status) from GoodsEntity where id = :id")
+    @Query("select new cn.moexc.vcs.infrasture.jpa.entity.queryresult.GoodsDetail(id, title, photo, subdescr, detail, origPrice, price, quantity, status, createTime) from GoodsEntity where id = :id")
     GoodsDetail selectGoodsDetail(@Param("id") String id);
 
     @Query("select new cn.moexc.vcs.infrasture.jpa.entity.queryresult.Goods4CreateOrder(id, title, photo, price, quantity, status) from GoodsEntity where id = :id")

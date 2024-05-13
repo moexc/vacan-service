@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 商品
@@ -23,19 +24,19 @@ public class GoodsEntity implements Serializable {
      * ID
      */
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private String id;
 
     /**
      * 标题
      */
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
     /**
      * 图片
      */
-    @Column(name = "photo", nullable = false)
+    @Column(name = "photo")
     private String photo;
 
     /**
@@ -47,37 +48,43 @@ public class GoodsEntity implements Serializable {
     /**
      * 详情
      */
-    @Column(name = "detail", nullable = false)
-    private byte[] detail;
+    @Column(name = "detail")
+    private String detail;
 
     /**
      * 分类
      */
-    @Column(name = "classify", nullable = false)
+    @Column(name = "classify")
     private String classify;
 
     /**
      * 原单价
      */
-    @Column(name = "orig_price", nullable = false)
+    @Column(name = "orig_price")
     private BigDecimal origPrice;
 
     /**
      * 单价
      */
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private BigDecimal price;
 
     /**
      * 数量
      */
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     private Integer quantity;
 
     /**
      * 状态 00:待审核 01:审核不通过 02:审核通过 03:已上架 04:已下架 05:已删除
      */
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
 
 }
