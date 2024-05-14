@@ -1,7 +1,7 @@
 package cn.moexc.vcs.web;
 
 import cn.moexc.vcs.service.GoodsService;
-import cn.moexc.vcs.service.dto.CreateGoodsDTO;
+import cn.moexc.vcs.service.dto.GoodsDTO;
 import cn.moexc.vcs.web.config.auth.Auth;
 import cn.moexc.vcs.web.config.auth.User;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +24,14 @@ public class GoodsController {
     }
 
     @PostMapping
-    public R create(CreateGoodsDTO dto){
+    public R create(@RequestBody GoodsDTO dto){
         goodsService.saveGoods(dto);
+        return R.success();
+    }
+
+    @PutMapping("/{id}")
+    public R update(@RequestBody GoodsDTO dto, @PathVariable("id") String id){
+        goodsService.updateGoods(dto, id);
         return R.success();
     }
 

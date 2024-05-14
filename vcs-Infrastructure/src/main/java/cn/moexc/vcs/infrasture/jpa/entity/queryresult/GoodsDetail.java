@@ -20,8 +20,9 @@ public class GoodsDetail {
     private BigDecimal quantity;
     private String status;
     private Date createTime;
+    private String classify;
 
-    public GoodsDetail(String id, String title, String photo, String subdescr, String detail, BigDecimal origPrice, BigDecimal price, Integer quantity, String status, Date createTime) {
+    public GoodsDetail(String id, String title, String photo, String subdescr, String detail, BigDecimal origPrice, BigDecimal price, Integer quantity, String status, Date createTime, String classify) {
         this.id = id;
         this.title = title;
         this.photo = photo;
@@ -32,5 +33,6 @@ public class GoodsDetail {
         this.quantity = new BigDecimal(quantity);
         this.status = status;
         this.createTime = createTime;
+        this.classify = classify;
     }
 }

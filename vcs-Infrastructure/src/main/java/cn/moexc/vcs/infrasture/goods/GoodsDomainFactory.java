@@ -18,6 +18,7 @@ public class GoodsDomainFactory {
         domain.setPrice(entity.getPrice());
         domain.setQuantity(entity.getQuantity());
         domain.setStatus(entity.getStatus());
+        domain.setCreateTime(entity.getCreateTime());
         return domain;
     }
 
@@ -33,6 +34,7 @@ public class GoodsDomainFactory {
         entity.setPrice(domain.getPrice());
         entity.setQuantity(domain.getQuantity());
         entity.setStatus(domain.getStatus());
+        entity.setCreateTime(domain.getCreateTime());
         return entity;
     }
 }

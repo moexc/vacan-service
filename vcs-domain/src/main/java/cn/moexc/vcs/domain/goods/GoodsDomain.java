@@ -4,6 +4,7 @@ import cn.moexc.vcs.domain.Utils;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class GoodsDomain {
@@ -57,6 +58,11 @@ public class GoodsDomain {
      */
     private String status;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
     public void create(CreateGoodsCommand cmd){
         this.id = Utils.genUUID();
         this.title = cmd.getTitle();
@@ -68,6 +74,18 @@ public class GoodsDomain {
         this.price = cmd.getPrice();
         this.quantity = cmd.getQuantity();
         this.status = "00";
+        this.createTime = new Date();
+    }
+
+    public void update(UpdateGoodsCommand cmd){
+        this.title = cmd.getTitle();
+        this.photo = cmd.getPhoto();
+        this.subdescr = cmd.getSubdescr();
+        this.detail = cmd.getDetail();
+        this.classify = cmd.getClassify();
+        this.origPrice = cmd.getOldPrice();
+        this.price = cmd.getPrice();
+        this.quantity = cmd.getQuantity();
     }
 
 }
