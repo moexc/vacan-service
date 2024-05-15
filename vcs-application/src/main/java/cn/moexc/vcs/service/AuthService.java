@@ -2,14 +2,17 @@ package cn.moexc.vcs.service;
 
 import cn.moexc.vcs.domain.AlterException;
 import cn.moexc.vcs.domain.auth.AuthDomain;
+import cn.moexc.vcs.domain.auth.CreateTokenCommand;
+import cn.moexc.vcs.domain.auth.TokenDTO;
 import cn.moexc.vcs.domain.customer.RegisterCommond;
-import cn.moexc.vcs.infrasture.auth.AuthDomainFactory;
 import cn.moexc.vcs.domain.auth.AuthDomainRepository;
 import cn.moexc.vcs.domain.customer.CustomerDomain;
 import cn.moexc.vcs.domain.customer.CustomerDomainRepository;
+import cn.moexc.vcs.service.cmdfactory.TokenCmdFactory;
 import cn.moexc.vcs.service.cmdfactory.RegisterCmdFactory;
 import cn.moexc.vcs.service.dto.LoginDTO;
 import cn.moexc.vcs.service.dto.RegisterDTO;
+import cn.moexc.vcs.service.vo.LoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +28,12 @@ public class AuthService {
         this.authDomainRepository = authDomainRepository;
     }
 
-    public AuthDomain login(LoginDTO loginDTO){
+    public LoginVO login(LoginDTO loginDTO){
         CustomerDomain customerDomain = customerDomainRepository.findByNumAndPwd(loginDTO.getUsername(), loginDTO.getPassword());
         if (customerDomain == null) throw new AlterException("登录失败：账号或密码错误！");
-        AuthDomain authDomain = AuthDomainFactory.genDoamin(customerDomain, loginDTO.getReme());
-        authDomainRepository.save(authDomain);
-        return authDomain;
-    }
-
-    public void logout(String token){
-        authDomainRepository.remove(token);
+        CreateTokenCommand cmd = TokenCmdFactory.createCmd(customerDomain.getId(), customerDomain.getCustomerName(), loginDTO.getReme());
+        TokenDTO tokens = authDomainRepository.genToken(cmd);
+        return new LoginVO(customerDomain.getId(), customerDomain.getCustomerName(), customerDomain.getCustomerPhoto(), tokens.getToken(), tokens.getRefToken());
     }
 
     public void register(RegisterDTO registerDTO){
@@ -45,4 +44,10 @@ public class AuthService {
         customerDomainRepository.save(customerDomain);
     }
 
+    public TokenDTO flushToken(String reftoken) {
+        AuthDomain ref = authDomainRepository.byId(reftoken);
+        if (ref == null) return null;
+        CreateTokenCommand cmd = TokenCmdFactory.createCmd(ref.getUserId(), ref.getNickName(), ref.getReme());
+        return authDomainRepository.genToken(cmd);
+    }
 }

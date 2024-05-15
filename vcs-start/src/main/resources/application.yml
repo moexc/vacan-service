@@ -47,7 +47,9 @@ minio:
   bucket: vacan
 
 auth:
-  timeout: 1800
+  token-timeout: 1800000 #30分
+  reftoken-timeout: 28800000 # 8小时
+  remtoken-timeout: 604800000 # 一周
 
 log-path: /home/moexc/ramfs
 

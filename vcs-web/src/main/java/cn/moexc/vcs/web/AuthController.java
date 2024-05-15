@@ -6,10 +6,7 @@ import cn.moexc.vcs.service.dto.RegisterDTO;
 import cn.moexc.vcs.web.config.auth.Auth;
 import cn.moexc.vcs.web.config.auth.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -29,10 +26,9 @@ public class AuthController {
         return R.success(authService.login(loginDTO));
     }
 
-    @PostMapping("/logout")
-    public R logout(@Auth User user){
-        authService.logout(user.getToken());
-        return R.success("ok");
+    @PostMapping("/flushToken")
+    public R refresh(@RequestParam("reftoken") String reftoken){
+        return R.success(authService.flushToken(reftoken));
     }
 
     @PostMapping("/register")

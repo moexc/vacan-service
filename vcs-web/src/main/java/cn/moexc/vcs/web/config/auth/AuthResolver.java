@@ -39,8 +39,6 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
             throw LOGIN_TIMEOUT_EXCEPTION;
         }
 
-        authDomainRepository.expire(token);
-
         return new User().initVal(authDomain);
     }
 
