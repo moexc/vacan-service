@@ -35,6 +35,12 @@ public class GoodsController {
         return R.success();
     }
 
+    @PatchMapping("/{id}")
+    public R patch(@RequestParam("status") String status, @PathVariable String id){
+        goodsService.updateStatus(status, id);
+        return R.success();
+    }
+
     @GetMapping("/{id}")
     public R findById(@PathVariable("id") String id){
         return R.success(goodsService.selectById(id));

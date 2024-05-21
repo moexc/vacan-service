@@ -87,7 +87,21 @@ public class GoodsService {
         }finally {
             lock.unlock();
         }
-
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void updateStatus(String status, String id) {
+        GoodsDomain domain = goodsDomainRepository.byId(id);
+        if ("03".equals(status)) domain.up();
+        else if ("04".equals(status)) domain.down();
+        else if ("05".equals(status)) domain.delete();
+        else throw new AlterException("未知操作");
+        RLock lock = redissonClient.getLock(domain.getId());
+        if (!lock.tryLock()) throw new AlterException("获取锁失败");
+        try{
+            goodsDomainRepository.save(domain);
+        }finally {
+            lock.unlock();
+        }
+    }
 }

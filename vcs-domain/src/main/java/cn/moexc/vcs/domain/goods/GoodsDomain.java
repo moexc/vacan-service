@@ -88,4 +88,16 @@ public class GoodsDomain {
         this.quantity = cmd.getQuantity();
     }
 
+    public void up(){
+        this.status = "03";
+    }
+
+    public void down(){
+        this.status = "04";
+    }
+
+    public void delete(){
+        this.status = "05";
+    }
+
 }

@@ -49,6 +49,7 @@ public class TradeDomainFactory {
         tradeEntity.setEndTime(tradeDomain.getEndTime());
         tradeEntity.setStatus(tradeDomain.getStatus());
         tradeEntity.setSendStatus(tradeDomain.getSendStatus());
+        tradeEntity.setBidCount(tradeDomain.getBidCount());
 
         for (int i = 0; i < tradeDomain.getBidDomains().size(); i++) {
             BidDomain bidDomain = tradeDomain.getBidDomains().get(i);

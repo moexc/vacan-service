@@ -10,7 +10,7 @@ spring:
       max-request-size: 1000MB
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://172.26.83.193:3306/vacan?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
+    url: jdbc:mysql://172.26.83.151:3306/vacan?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
     username: root
     password: qixinbaotest
   jpa:

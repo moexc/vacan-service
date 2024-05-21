@@ -49,15 +49,15 @@ public class TradeController {
     }
 
 
-//    @PutMapping("/{tradeId}")
-//    public R tradeOper(@PathVariable("tradeId") String tradeId,
-//                         @RequestParam("operation") String operation,
-//                         @Auth User user){
-//        if ("Send2Engine".equals(operation)){
-//            return R.success(tradeService.send2Engine(tradeId));
-//        }
-//        return R.success();
-//    }
+    @PatchMapping("/{tradeId}")
+    public R tradeOper(@PathVariable("tradeId") String tradeId,
+                       @RequestParam("operation") String operation,
+                       @Auth User user){
+        if ("Send2Engine".equals(operation)){
+            return R.success(tradeService.send2Engine(tradeId));
+        }
+        return R.success();
+    }
 
     @GetMapping("/pushed")
     public R pushed(){

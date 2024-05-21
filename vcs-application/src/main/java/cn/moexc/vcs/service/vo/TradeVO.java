@@ -48,29 +48,8 @@ public class TradeVO {
         vo.setName(entity.getName());
         vo.setStartTime(entity.getStartTime().getTime());
         vo.setEndTime(entity.getEndTime() == null ? null : entity.getEndTime().getTime());
-        if ("0".equals(entity.getStatus())){
-            if (System.currentTimeMillis() >= entity.getStartTime().getTime()){
-                vo.setStatus("运行中");
-            }else {
-                vo.setStatus("未启动");
-            }
-        }else if ("1".equals(entity.getStatus())){
-            vo.setStatus("运行中");
-        }else if ("2".equals(entity.getStatus())){
-            vo.setStatus("已结束");
-        }else {
-            vo.setStatus("未知");
-        }
-
-        if ("0".equals(entity.getSendStatus())){
-            vo.setSendStatus("未发送");
-        }else if ("1".equals(entity.getSendStatus())){
-            vo.setSendStatus("成功");
-        }else if ("2".equals(entity.getSendStatus())){
-            vo.setSendStatus("失败");
-        }else{
-            vo.setSendStatus("未知");
-        }
+        vo.setStatus(entity.getStatus());
+        vo.setSendStatus(entity.getSendStatus());
         vo.setBidCount(entity.getBidCount());
         return vo;
     }

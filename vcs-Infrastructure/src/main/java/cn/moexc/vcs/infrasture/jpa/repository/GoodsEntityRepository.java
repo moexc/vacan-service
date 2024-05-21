@@ -46,6 +46,7 @@ public interface GoodsEntityRepository extends JpaRepository<GoodsEntity, String
             "g.createTime " +
             ") " +
             "from GoodsEntity g " +
+            "where g.status <> '05' " +
             "order by g.createTime desc")
     Page<GoodsSimple> selectGoods(Pageable pageable);
 

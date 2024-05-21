@@ -45,7 +45,7 @@ public class TradeService {
     private final TradeBidEntityRepository tradeBidEntityRepository;
 
     public TradeService(TradeDomainRepository tradeDomainRepository,
-                        @Qualifier("bidEnginePort4RocketMQImpl") BidEnginePort bidEnginePort,
+                        @Qualifier("bidEnginePortImpl") BidEnginePort bidEnginePort,
                         TradeEntityRepository tradeEntityRepository,
                         TradeBidEntityRepository tradeBidEntityRepository) {
         this.tradeDomainRepository = tradeDomainRepository;
@@ -131,6 +131,7 @@ public class TradeService {
         return tradeEntities.stream().map(TradeVO::gen).collect(Collectors.toList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void acceptResult(TradeResultDTO tradeResultDTO) {
         TradeDomain tradeDomain = tradeDomainRepository.byId(tradeResultDTO.getId());
         tradeDomain.acceptResult(AcceptTradeResultCommandFactory.gen(tradeResultDTO));
