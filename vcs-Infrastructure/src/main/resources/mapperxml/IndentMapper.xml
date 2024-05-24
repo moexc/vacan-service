@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.moexc.vcs.infrasture.mybatis.mapper.IndentMapper">
+  <resultMap id="BaseResultMap" type="cn.moexc.vcs.infrasture.mybatis.entity.Indent">
+    <!--@mbg.generated-->
+    <!--@Table indent-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+    <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime" />
+    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
+    <result column="auto_cancel_time" jdbcType="TIMESTAMP" property="autoCancelTime" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, customer_id, goods_id, title, photo, price, quantity, amount, address, `status`, 
+    create_time, pay_time, delivery_time, accept_time, cancel_time, auto_cancel_time, 
+    delete_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from indent
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from indent
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.moexc.vcs.infrasture.mybatis.entity.Indent">
+    <!--@mbg.generated-->
+    insert into indent (id, customer_id, goods_id, 
+      title, photo, price, 
+      quantity, amount, address, 
+      `status`, create_time, pay_time, 
+      delivery_time, accept_time, cancel_time, 
+      auto_cancel_time, delete_time)
+    values (#{id,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, #{goodsId,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{quantity,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{address,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{deliveryTime,jdbcType=TIMESTAMP}, #{acceptTime,jdbcType=TIMESTAMP}, #{cancelTime,jdbcType=TIMESTAMP}, 
+      #{autoCancelTime,jdbcType=TIMESTAMP}, #{deleteTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.moexc.vcs.infrasture.mybatis.entity.Indent">
+    <!--@mbg.generated-->
+    update indent
+    set customer_id = #{customerId,jdbcType=VARCHAR},
+      goods_id = #{goodsId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      quantity = #{quantity,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      address = #{address,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+      cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+      auto_cancel_time = #{autoCancelTime,jdbcType=TIMESTAMP},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <sql id="OrderVO_Column_List">
+    id, customer_id as customerId, goods_id as goodsId, title, photo, price, quantity, amount, address, `status`,
+    UNIX_TIMESTAMP(create_time) as createTime, UNIX_TIMESTAMP(pay_time) as payTime, UNIX_TIMESTAMP(delivery_time) as deliveryTime,
+    UNIX_TIMESTAMP(accept_time) as acceptTime, UNIX_TIMESTAMP(cancel_time) as cancelTime, UNIX_TIMESTAMP(auto_cancel_time) as autoCancelTime,
+    UNIX_TIMESTAMP(delete_time) as deleteTime
+  </sql>
+
+  <select id="selectList" resultType="cn.moexc.vcs.infrasture.queryresult.OrderVO">
+    select
+    <include refid="OrderVO_Column_List" />
+    from indent
+    where customer_id = #{cid,jdbcType=VARCHAR}
+    and status != '06'
+    <if test="title != null and title != ''">
+      and title like '%'|| #{title,jdbcType=VARCHAR} ||'%'
+    </if>
+    <if test="status != null and status != ''">
+      and status = #{status,jdbcType=VARCHAR}
+    </if>
+    <if test="createTimeRangeBefore != null and createTimeRangeBefore != ''">
+      and create_time <![CDATA[ > ]]> STR_TO_DATE(#{createTimeRangeBefore,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+    </if>
+    <if test="createTimeRangeAfter != null and createTimeRangeAfter != ''">
+      and create_time <![CDATA[ < ]]> STR_TO_DATE(#{createTimeRangeAfter,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+    </if>
+    <if test="payTimeRangeBefore != null and payTimeRangeBefore != ''">
+      and pay_time <![CDATA[ > ]]> STR_TO_DATE(#{payTimeRangeBefore,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+    </if>
+    <if test="payTimeRangeAfter != null and payTimeRangeAfter != ''">
+      and pay_time <![CDATA[ < ]]> STR_TO_DATE(#{payTimeRangeAfter,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+    </if>
+    order by create_time desc
+  </select>
+</mapper>

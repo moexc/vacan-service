@@ -19,17 +19,17 @@ public class SearchOrderDTO {
     /**
      * 下单时间起
      */
-    private Date createTimeRangeBefore;
+    private String createTimeRangeBefore;
     /**
      * 下单时间止
      */
-    private Date createTimeRangeAfter;
+    private String createTimeRangeAfter;
     /**
      * 付款时间起
      */
-    private Date payTimeRangeBefore;
+    private String payTimeRangeBefore;
     /**
      * 付款时间止
      */
-    private Date payTimeRangeAfter;
+    private String payTimeRangeAfter;
 }

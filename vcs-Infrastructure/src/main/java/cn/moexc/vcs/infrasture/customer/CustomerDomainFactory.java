@@ -1,10 +1,10 @@
 package cn.moexc.vcs.infrasture.customer;
 
 import cn.moexc.vcs.domain.customer.CustomerDomain;
-import cn.moexc.vcs.infrasture.jpa.entity.CustomerEntity;
+import cn.moexc.vcs.infrasture.mybatis.entity.Customer;
 
 public class CustomerDomainFactory {
-    public static CustomerDomain genDomain(CustomerEntity customerEntity){
+    public static CustomerDomain genDomain(Customer customerEntity){
         CustomerDomain domain = new CustomerDomain();
         domain.setId(customerEntity.getId());
         domain.setCustomerName(customerEntity.getCustomerName());
@@ -17,8 +17,8 @@ public class CustomerDomainFactory {
         return domain;
     }
 
-    public static CustomerEntity genEntity(CustomerDomain domain){
-        CustomerEntity entity = new CustomerEntity();
+    public static Customer genEntity(CustomerDomain domain){
+        Customer entity = new Customer();
         entity.setId(domain.getId());
         entity.setCustomerName(domain.getCustomerName());
         entity.setCustomerPhoto(domain.getCustomerPhoto());

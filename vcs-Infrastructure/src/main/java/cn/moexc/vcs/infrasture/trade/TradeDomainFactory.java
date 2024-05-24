@@ -2,15 +2,15 @@ package cn.moexc.vcs.infrasture.trade;
 
 import cn.moexc.vcs.domain.trade.BidDomain;
 import cn.moexc.vcs.domain.trade.TradeDomain;
-import cn.moexc.vcs.infrasture.jpa.entity.TradeBidEntity;
-import cn.moexc.vcs.infrasture.jpa.entity.TradeEntity;
+import cn.moexc.vcs.infrasture.mybatis.entity.Trade;
+import cn.moexc.vcs.infrasture.mybatis.entity.TradeBid;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TradeDomainFactory {
 
-    public static TradeDomain genDomain(TradeEntity tradeEntity, List<TradeBidEntity> tradeBidEntities){
+    public static TradeDomain genDomain(Trade tradeEntity, List<TradeBid> tradeBidEntities){
         TradeDomain tradeDomain = new TradeDomain();
         tradeDomain.setId(tradeEntity.getId());
         tradeDomain.setName(tradeEntity.getName());
@@ -42,7 +42,7 @@ public class TradeDomainFactory {
     }
 
 
-    public static void genEntity(TradeDomain tradeDomain, TradeEntity tradeEntity, List<TradeBidEntity> tradeBidEntities){
+    public static void genEntity(TradeDomain tradeDomain, Trade tradeEntity, List<TradeBid> tradeBidEntities){
         tradeEntity.setId(tradeDomain.getId());
         tradeEntity.setName(tradeDomain.getName());
         tradeEntity.setStartTime(tradeDomain.getStartTime());
@@ -53,7 +53,7 @@ public class TradeDomainFactory {
 
         for (int i = 0; i < tradeDomain.getBidDomains().size(); i++) {
             BidDomain bidDomain = tradeDomain.getBidDomains().get(i);
-            TradeBidEntity tradeBidEntity = new TradeBidEntity();
+            TradeBid tradeBidEntity = new TradeBid();
             tradeBidEntity.setId(bidDomain.getId());
             tradeBidEntity.setTradeId(bidDomain.getTradeId());
             tradeBidEntity.setNumber(i);

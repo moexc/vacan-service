@@ -1,5 +1,6 @@
 package cn.moexc.vcs.web;
 
+import cn.moexc.vcs.service.QueryTradeService;
 import cn.moexc.vcs.service.TradeService;
 import cn.moexc.vcs.service.dto.TradeDTO;
 import cn.moexc.vcs.service.dto.SearchTradeDTO;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class TradeController {
 
     private final TradeService tradeService;
+    private final QueryTradeService queryTradeService;
 
-    public TradeController(TradeService tradeService) {
+    public TradeController(TradeService tradeService, QueryTradeService queryTradeService) {
         this.tradeService = tradeService;
+        this.queryTradeService = queryTradeService;
     }
 
     @PostMapping("/search")
@@ -23,7 +26,7 @@ public class TradeController {
                   @RequestParam("page") Integer page,
                   @RequestParam("rows") Integer rows,
                   @Auth User user){
-        return R.success(tradeService.list(searchTradeDTO, page, rows));
+        return R.success(queryTradeService.list(searchTradeDTO, page, rows));
     }
 
     @PostMapping
@@ -33,7 +36,7 @@ public class TradeController {
 
     @GetMapping("/{tradeId}")
     public R detail(@PathVariable("tradeId") String tradeId){
-        return R.success(tradeService.detail(tradeId));
+        return R.success(queryTradeService.detail(tradeId));
     }
 
     @PutMapping("/{tradeId}")
@@ -61,7 +64,7 @@ public class TradeController {
 
     @GetMapping("/pushed")
     public R pushed(){
-        return R.success(tradeService.pushed());
+        return R.success(queryTradeService.pushed());
     }
 
     @PostMapping("/result")

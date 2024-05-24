@@ -1,6 +1,6 @@
 package cn.moexc.vcs.service.vo;
 
-import cn.moexc.vcs.infrasture.jpa.entity.AddressDeliveryEntity;
+import cn.moexc.vcs.infrasture.mybatis.entity.AddressDelivery;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ public class AddressVO {
     private String postCode;
     private String isdefault;
 
-    public static AddressVO gen(AddressDeliveryEntity entity){
+    public static AddressVO gen(AddressDelivery entity){
         AddressVO addressVO = new AddressVO();
         addressVO.setId(entity.getId());
         addressVO.setAddress(entity.getCity().replaceAll(",", "") + entity.getDetailed());

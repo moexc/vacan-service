@@ -1,30 +1,30 @@
 package cn.moexc.vcs.infrasture.goods;
 
-import cn.moexc.vcs.domain.AlterException;
 import cn.moexc.vcs.domain.goods.GoodsDomain;
 import cn.moexc.vcs.domain.goods.GoodsDomainRepository;
-import cn.moexc.vcs.infrasture.jpa.entity.GoodsEntity;
-import cn.moexc.vcs.infrasture.jpa.repository.GoodsEntityRepository;
+import cn.moexc.vcs.infrasture.mybatis.entity.Goods;
+import cn.moexc.vcs.infrasture.mybatis.mapper.GoodsMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class GoodsDomainRepositoryImpl implements GoodsDomainRepository {
 
-    private final GoodsEntityRepository goodsEntityRepository;
+    private final GoodsMapper goodsMapper;
 
-    public GoodsDomainRepositoryImpl(GoodsEntityRepository goodsEntityRepository) {
-        this.goodsEntityRepository = goodsEntityRepository;
+    public GoodsDomainRepositoryImpl(GoodsMapper goodsMapper) {
+        this.goodsMapper = goodsMapper;
     }
 
     @Override
     public GoodsDomain byId(String id) {
-        GoodsEntity goodsEntity = goodsEntityRepository.findById(id).orElseThrow(() -> new AlterException("获取商品信息失败"));
-        return GoodsDomainFactory.genDomain(goodsEntity);
+        return GoodsDomainFactory.genDomain(goodsMapper.selectByPrimaryKey(id));
     }
 
     @Override
     public void save(GoodsDomain domain) {
-        GoodsEntity entity = GoodsDomainFactory.genEntity(domain);
-        goodsEntityRepository.save(entity);
+        Goods newEntity = GoodsDomainFactory.genEntity(domain);
+        Goods entity = goodsMapper.selectByPrimaryKey(newEntity.getId());
+        if (entity == null) goodsMapper.insert(newEntity);
+        else goodsMapper.updateByPrimaryKey(newEntity);
     }
 }

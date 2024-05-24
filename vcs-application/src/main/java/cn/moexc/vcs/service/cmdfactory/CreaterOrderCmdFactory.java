@@ -1,7 +1,7 @@
 package cn.moexc.vcs.service.cmdfactory;
 
 import cn.moexc.vcs.domain.order.CreateOrderCommand;
-import cn.moexc.vcs.infrasture.jpa.entity.queryresult.Goods4CreateOrder;
+import cn.moexc.vcs.infrasture.queryresult.Goods4CreateOrder;
 import cn.moexc.vcs.service.dto.CreateOrderDTO;
 
 public class CreaterOrderCmdFactory {

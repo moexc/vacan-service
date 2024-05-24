@@ -1,6 +1,7 @@
 package cn.moexc.vcs.web;
 
 import cn.moexc.vcs.service.AddressService;
+import cn.moexc.vcs.service.QueryAddressService;
 import cn.moexc.vcs.service.dto.CreateAddressDTO;
 import cn.moexc.vcs.web.config.auth.Auth;
 import cn.moexc.vcs.web.config.auth.User;
@@ -14,15 +15,17 @@ import javax.validation.Valid;
 public class AddressController {
 
     private final AddressService addressService;
+    private final QueryAddressService queryAddressService;
 
     @Autowired
-    public AddressController(AddressService addressService) {
+    public AddressController(AddressService addressService, QueryAddressService queryAddressService) {
         this.addressService = addressService;
+        this.queryAddressService = queryAddressService;
     }
 
     @GetMapping
     public R list(@Auth User user){
-        return R.success(addressService.list(user.getUserId()));
+        return R.success(queryAddressService.list(user.getUserId()));
     }
 
     @PostMapping

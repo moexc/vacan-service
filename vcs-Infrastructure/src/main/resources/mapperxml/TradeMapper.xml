@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.moexc.vcs.infrasture.mybatis.mapper.TradeMapper">
+  <resultMap id="BaseResultMap" type="cn.moexc.vcs.infrasture.mybatis.entity.Trade">
+    <!--@mbg.generated-->
+    <!--@Table trade-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="send_status" jdbcType="VARCHAR" property="sendStatus" />
+    <result column="bid_count" jdbcType="INTEGER" property="bidCount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, start_time, end_time, `status`, send_status, bid_count
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from trade
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from trade
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.moexc.vcs.infrasture.mybatis.entity.Trade">
+    <!--@mbg.generated-->
+    insert into trade (id, `name`, start_time, 
+      end_time, `status`, send_status, 
+      bid_count)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, 
+      #{bidCount,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.moexc.vcs.infrasture.mybatis.entity.Trade">
+    <!--@mbg.generated-->
+    update trade
+    set `name` = #{name,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=VARCHAR},
+      send_status = #{sendStatus,jdbcType=VARCHAR},
+      bid_count = #{bidCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <sql id="TradeVO_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, UNIX_TIMESTAMP(start_time) as startTime, UNIX_TIMESTAMP(end_time) as endTime, `status`, send_status as sendStatus, bid_count as bidCount
+  </sql>
+
+  <select id="findList" resultType="cn.moexc.vcs.infrasture.queryresult.TradeVO">
+    select
+    <include refid="TradeVO_Column_List" />
+    from trade
+    <where>
+      <if test="tradeName != null and tradeName != ''">
+        and name like '%'|| #{tradeName,jdbcType=VARCHAR} ||'%'
+      </if>
+      <if test="timeRangeBefore != null and timeRangeBefore != ''">
+        and start_time <![CDATA[ > ]]> STR_TO_DATE(#{timeRangeBefore,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+      </if>
+      <if test="timeRangeAfter != null and timeRangeAfter != ''">
+        and start_time <![CDATA[ < ]]> STR_TO_DATE(#{timeRangeAfter,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+      </if>
+      <if test="tradeStatus != null and tradeStatus != ''">
+        and status = #{tradeStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="sendStatus != null and sendStatus != ''">
+        and send_status = #{sendStatus,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by start_time desc, name
+  </select>
+
+  <select id="pused" resultType="cn.moexc.vcs.infrasture.queryresult.TradeVO">
+    select
+    <include refid="TradeVO_Column_List" />
+    from trade
+    where send_status = '1'
+    and status != '2'
+    order by start_time
+  </select>
+</mapper>

@@ -32,6 +32,15 @@ spring:
       repositories:
         enabled: false
 
+pagehelper:
+  helper-dialect: mysql
+  params: countSql
+  reasonable: true
+  support-methods-arguments: true
+
+mybatis:
+  mapper-locations: classpath:mapperxml/*.xml
+
 rocketmq:
   name-server: 172.26.82.175:9876
   producer:

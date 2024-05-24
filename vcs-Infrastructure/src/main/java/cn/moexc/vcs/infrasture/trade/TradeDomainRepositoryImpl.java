@@ -2,50 +2,49 @@ package cn.moexc.vcs.infrasture.trade;
 
 import cn.moexc.vcs.domain.trade.TradeDomain;
 import cn.moexc.vcs.domain.trade.TradeDomainRepository;
-import cn.moexc.vcs.infrasture.jpa.entity.TradeBidEntity;
-import cn.moexc.vcs.infrasture.jpa.entity.TradeEntity;
-import cn.moexc.vcs.infrasture.jpa.repository.TradeBidEntityRepository;
-import cn.moexc.vcs.infrasture.jpa.repository.TradeEntityRepository;
+import cn.moexc.vcs.infrasture.mybatis.entity.Trade;
+import cn.moexc.vcs.infrasture.mybatis.entity.TradeBid;
+import cn.moexc.vcs.infrasture.mybatis.mapper.TradeBidMapper;
+import cn.moexc.vcs.infrasture.mybatis.mapper.TradeMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class TradeDomainRepositoryImpl implements TradeDomainRepository {
 
-    private final TradeEntityRepository tradeEntityRepository;
-    private final TradeBidEntityRepository tradeBidEntityRepository;
+    private final TradeMapper tradeMapper;
+    private final TradeBidMapper tradeBidMapper;
 
-    public TradeDomainRepositoryImpl(TradeEntityRepository tradeEntityRepository, TradeBidEntityRepository tradeBidEntityRepository) {
-        this.tradeEntityRepository = tradeEntityRepository;
-        this.tradeBidEntityRepository = tradeBidEntityRepository;
+    public TradeDomainRepositoryImpl(TradeMapper tradeMapper, TradeBidMapper tradeBidMapper) {
+        this.tradeMapper = tradeMapper;
+        this.tradeBidMapper = tradeBidMapper;
     }
+
 
     @Override
     public TradeDomain byId(String s) {
-        Optional<TradeEntity> tradeEntityOptional = tradeEntityRepository.findById(s);
-        TradeEntity tradeEntity = tradeEntityOptional.orElseThrow(() -> new RuntimeException("未找到专场信息"));
-        List<TradeBidEntity> tradeBidEntities = tradeBidEntityRepository.findAllByTradeIdOrderByNumberAsc(s);
-        return TradeDomainFactory.genDomain(tradeEntity, tradeBidEntities);
+        Trade trade = tradeMapper.selectByPrimaryKey(s);
+        List<TradeBid> bids = tradeBidMapper.selectAllByTradeIdOrderByNumber(s);
+        return TradeDomainFactory.genDomain(trade, bids);
     }
 
     @Override
     public void save(TradeDomain domain) {
-        TradeEntity tradeEntity = new TradeEntity();
-        List<TradeBidEntity> tradeBidEntities = new ArrayList<>();
-        TradeDomainFactory.genEntity(domain, tradeEntity, tradeBidEntities);
-        if (tradeEntityRepository.existsById(domain.getId())){
+        Trade trade = new Trade();
+        List<TradeBid> bids = new ArrayList<>();
+        TradeDomainFactory.genEntity(domain, trade, bids);
+        if (tradeMapper.selectByPrimaryKey(domain.getId()) != null){
             delete(domain.getId());
         }
-        tradeEntityRepository.save(tradeEntity);
-        tradeBidEntityRepository.saveAll(tradeBidEntities);
+        tradeMapper.insert(trade);
+        tradeBidMapper.insertList(bids);
     }
 
     @Override
     public void delete(String tradeId) {
-        tradeEntityRepository.deleteById(tradeId);
-        tradeBidEntityRepository.deleteByTradeId(tradeId);
+        tradeMapper.deleteByPrimaryKey(tradeId);
+        tradeBidMapper.deleteByTradeId(tradeId);
     }
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.moexc.vcs.infrasture.mybatis.mapper.GoodsMapper">
+  <resultMap id="BaseResultMap" type="cn.moexc.vcs.infrasture.mybatis.entity.Goods">
+    <!--@mbg.generated-->
+    <!--@Table goods-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="subdescr" jdbcType="VARCHAR" property="subdescr" />
+    <result column="detail" jdbcType="BLOB" property="detail" />
+    <result column="classify" jdbcType="VARCHAR" property="classify" />
+    <result column="orig_price" jdbcType="DECIMAL" property="origPrice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, title, photo, subdescr, detail, classify, orig_price, price, quantity, `status`, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from goods
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.moexc.vcs.infrasture.mybatis.entity.Goods">
+    <!--@mbg.generated-->
+    insert into goods (id, title, photo, 
+      subdescr, detail, classify, 
+      orig_price, price, quantity, 
+      `status`, create_time)
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, 
+      #{subdescr,jdbcType=VARCHAR}, #{detail,jdbcType=BLOB}, #{classify,jdbcType=VARCHAR}, 
+      #{origPrice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
+      #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.moexc.vcs.infrasture.mybatis.entity.Goods">
+    <!--@mbg.generated-->
+    update goods
+    set title = #{title,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      subdescr = #{subdescr,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=BLOB},
+      classify = #{classify,jdbcType=VARCHAR},
+      orig_price = #{origPrice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      quantity = #{quantity,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <sql id="GoodsSimpleVO_Column_List">
+    id, title, photo, subdescr, orig_price as origPrice, price, quantity, `status`,
+    UNIX_TIMESTAMP(create_time) as createTime
+  </sql>
+
+  <select id="todayStar" resultType="cn.moexc.vcs.infrasture.queryresult.GoodsSimpleVO">
+    select
+    <include refid="GoodsSimpleVO_Column_List" />
+    from goods
+    where status = '03'
+    order by create_time desc
+  </select>
+
+  <select id="findList" resultType="cn.moexc.vcs.infrasture.queryresult.GoodsSimpleVO">
+    select
+    <include refid="GoodsSimpleVO_Column_List" />
+    from goods
+    where status != '05'
+    <if test="name != null and name != ''">
+      and title like '%'|| #{name,jdbcType=VARCHAR} ||'%'
+    </if>
+    <if test="timeRangeBefore != null and timeRangeBefore != ''">
+      and create_time <![CDATA[ > ]]> STR_TO_DATE(#{timeRangeBefore,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+    </if>
+    <if test="timeRangeAfter != null and timeRangeAfter != ''">
+      and create_time <![CDATA[ < ]]> STR_TO_DATE(#{timeRangeAfter,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+    </if>
+    <if test="status != null and status != ''">
+      and status = #{status,jdbcType=VARCHAR}
+    </if>
+    order by create_time desc
+  </select>
+
+  <sql id="GoodsDetailVO_Column_List">
+    id, title, photo, subdescr, detail, orig_price as origPrice, price, quantity, `status`,
+    UNIX_TIMESTAMP(create_time) as createTime, classify
+  </sql>
+
+  <select id="selectGoodsDetail" resultType="cn.moexc.vcs.infrasture.queryresult.GoodsDetailVO">
+    select
+    <include refid="GoodsDetailVO_Column_List" />
+    from goods
+    where status != '05'
+    and id = #{id,jdbcType=VARCHAR}
+  </select>
+</mapper>

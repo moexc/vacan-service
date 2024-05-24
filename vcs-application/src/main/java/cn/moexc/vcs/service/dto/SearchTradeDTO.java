@@ -1,6 +1,5 @@
 package cn.moexc.vcs.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,13 +15,11 @@ public class SearchTradeDTO {
     /**
      * 开始时间起
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date timeRangeBefore;
+    private String timeRangeBefore;
     /**
      * 开始时间止
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date timeRangeAfter;
+    private String timeRangeAfter;
     /**
      * 执行状态
      */

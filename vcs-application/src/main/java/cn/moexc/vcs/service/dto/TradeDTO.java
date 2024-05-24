@@ -1,7 +1,7 @@
 package cn.moexc.vcs.service.dto;
 
-import cn.moexc.vcs.infrasture.jpa.entity.TradeBidEntity;
-import cn.moexc.vcs.infrasture.jpa.entity.TradeEntity;
+import cn.moexc.vcs.infrasture.mybatis.entity.Trade;
+import cn.moexc.vcs.infrasture.mybatis.entity.TradeBid;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,7 +66,7 @@ public class TradeDTO {
         private BigDecimal bidPrice;
     }
 
-    public static TradeDTO gen(TradeEntity tradeEntity, List<TradeBidEntity> tradeBidEntities){
+    public static TradeDTO gen(Trade tradeEntity, List<TradeBid> tradeBidEntities){
         TradeDTO tradeDTO = new TradeDTO();
         tradeDTO.setTradeName(tradeEntity.getName());
         tradeDTO.setStartTime(tradeEntity.getStartTime());

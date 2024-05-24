@@ -1,10 +1,10 @@
 package cn.moexc.vcs.infrasture.address;
 
 import cn.moexc.vcs.domain.address.AddressDomain;
-import cn.moexc.vcs.infrasture.jpa.entity.AddressDeliveryEntity;
+import cn.moexc.vcs.infrasture.mybatis.entity.AddressDelivery;
 
 public class AddressDomainFactory {
-    public static AddressDomain genDomain(AddressDeliveryEntity entity){
+    public static AddressDomain genDomain(AddressDelivery entity){
         if (entity == null) return null;
         AddressDomain domain = new AddressDomain();
         domain.setId(entity.getId());
@@ -16,8 +16,8 @@ public class AddressDomainFactory {
         return domain;
     }
 
-    public static AddressDeliveryEntity genEntity(AddressDomain domain){
-        AddressDeliveryEntity entity = new AddressDeliveryEntity();
+    public static AddressDelivery genEntity(AddressDomain domain){
+        AddressDelivery entity = new AddressDelivery();
         entity.setId(domain.getId());
         entity.setCustomerId(domain.getCustomerId());
         entity.setCity(domain.getCity());

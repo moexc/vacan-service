@@ -2,39 +2,33 @@ package cn.moexc.vcs.infrasture.pay;
 
 import cn.moexc.vcs.domain.pay.PayDomain;
 import cn.moexc.vcs.domain.pay.PayDomainRepository;
-import cn.moexc.vcs.infrasture.jpa.entity.IndentEntity;
-import cn.moexc.vcs.infrasture.jpa.entity.PayInfoEntity;
-import cn.moexc.vcs.infrasture.jpa.entity.PayInfoEntityKey;
-import cn.moexc.vcs.infrasture.jpa.repository.IndentEntityRepository;
-import cn.moexc.vcs.infrasture.jpa.repository.PayInfoEntityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.moexc.vcs.infrasture.mybatis.entity.Indent;
+import cn.moexc.vcs.infrasture.mybatis.entity.PayInfo;
+import cn.moexc.vcs.infrasture.mybatis.mapper.IndentMapper;
+import cn.moexc.vcs.infrasture.mybatis.mapper.PayInfoMapper;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class PayDomainRepositoryImpl implements PayDomainRepository {
 
-    private final IndentEntityRepository indentEntityRepository;
-    private final PayInfoEntityRepository payInfoEntityRepository;
+    private final IndentMapper indentMapper;
+    private final PayInfoMapper payInfoMapper;
 
-    @Autowired
-    public PayDomainRepositoryImpl(IndentEntityRepository indentEntityRepository, PayInfoEntityRepository payInfoEntityRepository) {
-        this.indentEntityRepository = indentEntityRepository;
-        this.payInfoEntityRepository = payInfoEntityRepository;
+    public PayDomainRepositoryImpl(IndentMapper indentMapper, PayInfoMapper payInfoMapper) {
+        this.indentMapper = indentMapper;
+        this.payInfoMapper = payInfoMapper;
     }
+
 
     @Override
     public PayDomain byId(String orderId, String mode, String payTimeout) {
-        Optional<IndentEntity> indentEntityOptional = indentEntityRepository.findById(orderId);
-        IndentEntity indentEntity = indentEntityOptional.orElseThrow(() -> new RuntimeException("获取订单信息失败"));
-        Optional<PayInfoEntity> payInfoEntityOptional = payInfoEntityRepository.findById(new PayInfoEntityKey(orderId, mode));
-        PayInfoEntity payInfoEntity = payInfoEntityOptional.orElse(null);
-        return PayDomainFactory.genDomain(indentEntity, payInfoEntity, payTimeout);
+        Indent indent = indentMapper.selectByPrimaryKey(orderId);
+        PayInfo payInfo = payInfoMapper.selectByPrimaryKey(orderId, mode);
+        return PayDomainFactory.genDomain(indent, payInfo, payTimeout);
     }
 
     @Override
     public void save(PayDomain domain) {
-        payInfoEntityRepository.save(PayDomainFactory.genEntity(domain));
+        payInfoMapper.insert(PayDomainFactory.genEntity(domain));
     }
 }

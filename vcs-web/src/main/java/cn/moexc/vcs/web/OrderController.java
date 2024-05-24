@@ -1,6 +1,7 @@
 package cn.moexc.vcs.web;
 
 import cn.moexc.vcs.service.OrderService;
+import cn.moexc.vcs.service.QueryOrderService;
 import cn.moexc.vcs.service.dto.CreateOrderDTO;
 import cn.moexc.vcs.service.dto.SearchOrderDTO;
 import cn.moexc.vcs.web.config.auth.Auth;
@@ -14,9 +15,11 @@ import javax.validation.Valid;
 public class OrderController {
 
     private final OrderService orderService;
+    private final QueryOrderService queryOrderService;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, QueryOrderService queryOrderService) {
         this.orderService = orderService;
+        this.queryOrderService = queryOrderService;
     }
 
     @PostMapping("/search")
@@ -24,7 +27,7 @@ public class OrderController {
                     @RequestBody SearchOrderDTO searchOrderDTO,
                     @RequestParam("page") Integer page,
                     @RequestParam("rows") Integer rows){
-        return R.success(orderService.selectList(user.getUserId(), searchOrderDTO, page, rows));
+        return R.success(queryOrderService.selectList(user.getUserId(), searchOrderDTO, page, rows));
     }
 
     @PostMapping
