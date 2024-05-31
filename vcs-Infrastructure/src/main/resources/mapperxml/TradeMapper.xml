@@ -51,7 +51,7 @@
 
   <sql id="TradeVO_Column_List">
     <!--@mbg.generated-->
-    id, `name`, UNIX_TIMESTAMP(start_time) as startTime, UNIX_TIMESTAMP(end_time) as endTime, `status`, send_status as sendStatus, bid_count as bidCount
+    id, `name`, UNIX_TIMESTAMP(start_time) * 1000 as startTime, UNIX_TIMESTAMP(end_time) * 1000 as endTime, `status`, send_status as sendStatus, bid_count as bidCount
   </sql>
 
   <select id="findList" resultType="cn.moexc.vcs.infrasture.queryresult.TradeVO">
@@ -60,7 +60,7 @@
     from trade
     <where>
       <if test="tradeName != null and tradeName != ''">
-        and name like '%'|| #{tradeName,jdbcType=VARCHAR} ||'%'
+        and name like concat('%', #{tradeName,jdbcType=VARCHAR}, '%')
       </if>
       <if test="timeRangeBefore != null and timeRangeBefore != ''">
         and start_time <![CDATA[ > ]]> STR_TO_DATE(#{timeRangeBefore,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')

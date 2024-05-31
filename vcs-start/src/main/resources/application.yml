@@ -40,6 +40,8 @@ pagehelper:
 
 mybatis:
   mapper-locations: classpath:mapperxml/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 rocketmq:
   name-server: 172.26.82.175:9876

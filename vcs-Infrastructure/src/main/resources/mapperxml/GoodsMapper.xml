@@ -62,7 +62,7 @@
 
   <sql id="GoodsSimpleVO_Column_List">
     id, title, photo, subdescr, orig_price as origPrice, price, quantity, `status`,
-    UNIX_TIMESTAMP(create_time) as createTime
+    UNIX_TIMESTAMP(create_time) * 1000 as createTime
   </sql>
 
   <select id="todayStar" resultType="cn.moexc.vcs.infrasture.queryresult.GoodsSimpleVO">
@@ -79,7 +79,7 @@
     from goods
     where status != '05'
     <if test="name != null and name != ''">
-      and title like '%'|| #{name,jdbcType=VARCHAR} ||'%'
+      and title like concat('%', #{name,jdbcType=VARCHAR}, '%')
     </if>
     <if test="timeRangeBefore != null and timeRangeBefore != ''">
       and create_time <![CDATA[ > ]]> STR_TO_DATE(#{timeRangeBefore,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
@@ -94,8 +94,8 @@
   </select>
 
   <sql id="GoodsDetailVO_Column_List">
-    id, title, photo, subdescr, detail, orig_price as origPrice, price, quantity, `status`,
-    UNIX_TIMESTAMP(create_time) as createTime, classify
+    id, title, photo, subdescr, convert(detail using utf8) as detail, orig_price as oldPrice, price, quantity, `status`,
+    UNIX_TIMESTAMP(create_time) * 1000 as createTime, classify
   </sql>
 
   <select id="selectGoodsDetail" resultType="cn.moexc.vcs.infrasture.queryresult.GoodsDetailVO">

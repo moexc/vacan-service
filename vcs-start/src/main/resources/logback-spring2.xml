@@ -30,6 +30,11 @@
 		<!-- 选择输出器 -->
 		<appender-ref ref="vcs" />
 	</logger>
+
+	<logger name="cn.moexc.vcs.infrasture.mybatis.mapper" level="info" addtivity="false">
+		<!-- 选择输出器 -->
+		<appender-ref ref="console" />
+	</logger>
 	
 	
 	<root level="error">
