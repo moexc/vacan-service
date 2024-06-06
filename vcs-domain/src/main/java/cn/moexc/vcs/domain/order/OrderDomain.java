@@ -99,27 +99,11 @@ public class OrderDomain {
     private Date deleteTime;
 
     /**
-     * 商品库存
-     */
-    private Integer goodsQuantity;
-
-    /**
      * 生成订单
      * @param cmd
      * @return 订单编号（ID）
      */
     public String create(CreateOrderCommand cmd){
-        if (cmd.getGoodsId() == null){
-            throw new AlterException("获取商品信息失败");
-        }
-        if (!("03").equals(cmd.getStatus())){
-            throw new AlterException("商品已下架");
-        }
-        this.goodsQuantity = cmd.getGoodsQuantity() - cmd.getQuantity();
-        if (this.goodsQuantity < 0){
-            throw new AlterException("购买数量超出库存");
-        }
-
         String orderId = Utils.genUUID();
         this.id = orderId;
         this.customerId = cmd.getCustomerId();
@@ -150,7 +134,6 @@ public class OrderDomain {
         }
         this.status = "05";
         this.autoCancelTime = new Date();
-        this.goodsQuantity = this.goodsQuantity + this.quantity;
     }
 
     /**
@@ -163,7 +146,6 @@ public class OrderDomain {
         }
         this.status = "04";
         this.cancelTime = new Date();
-        this.goodsQuantity = this.goodsQuantity + this.quantity;
     }
 
     /**

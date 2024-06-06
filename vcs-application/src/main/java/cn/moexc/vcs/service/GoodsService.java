@@ -6,6 +6,7 @@ import cn.moexc.vcs.domain.goods.GoodsDomain;
 import cn.moexc.vcs.domain.goods.GoodsDomainRepository;
 import cn.moexc.vcs.domain.goods.UpdateGoodsCommand;
 import cn.moexc.vcs.service.cmdfactory.GoodsCmdFactory;
+import cn.moexc.vcs.service.config.LockerException;
 import cn.moexc.vcs.service.dto.GoodsDTO;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -29,13 +30,6 @@ public class GoodsService {
         CreateGoodsCommand cmd = GoodsCmdFactory.createCmd(goodsDTO);
         GoodsDomain domain = new GoodsDomain();
         domain.create(cmd);
-        RLock lock = redissonClient.getLock(domain.getId());
-        if (!lock.tryLock()) throw new AlterException("获取锁失败");
-        try{
-            goodsDomainRepository.save(domain);
-        }finally {
-            lock.unlock();
-        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -44,7 +38,7 @@ public class GoodsService {
         UpdateGoodsCommand cmd = GoodsCmdFactory.updateCmd(dto);
         domain.update(cmd);
         RLock lock = redissonClient.getLock(domain.getId());
-        if (!lock.tryLock()) throw new AlterException("获取锁失败");
+        if (!lock.tryLock()) throw new LockerException();
         try{
             goodsDomainRepository.save(domain);
         }finally {
@@ -60,7 +54,7 @@ public class GoodsService {
         else if ("05".equals(status)) domain.delete();
         else throw new AlterException("未知操作");
         RLock lock = redissonClient.getLock(domain.getId());
-        if (!lock.tryLock()) throw new AlterException("获取锁失败");
+        if (!lock.tryLock()) throw new LockerException();
         try{
             goodsDomainRepository.save(domain);
         }finally {

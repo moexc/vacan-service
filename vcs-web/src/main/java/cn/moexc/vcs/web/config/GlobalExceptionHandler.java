@@ -1,6 +1,7 @@
 package cn.moexc.vcs.web.config;
 
 import cn.moexc.vcs.domain.AlterException;
+import cn.moexc.vcs.service.config.LockerException;
 import cn.moexc.vcs.web.R;
 import cn.moexc.vcs.web.config.auth.AuthException;
 import org.slf4j.Logger;
@@ -29,6 +30,12 @@ public class GlobalExceptionHandler {
     public R alterExceptionHandler(AlterException alterException, HttpServletResponse res){
         res.setStatus(HttpStatus.NOT_EXTENDED.value());
         return R.error(alterException.getMessage());
+    }
+
+    @ExceptionHandler(LockerException.class)
+    public R lockerException(LockerException lockerException, HttpServletResponse res){
+        res.setStatus(HttpStatus.CONFLICT.value());
+        return R.error("请稍后重试");
     }
 
     /**

@@ -5,6 +5,7 @@ import cn.moexc.vcs.infrasture.queryresult.OrderVO;
 import cn.moexc.vcs.service.dto.SearchOrderDTO;
 import cn.moexc.vcs.service.vo.PageResult;
 import cn.moexc.vcs.service.vo.PageResultFactory;
+import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +20,14 @@ public class QueryOrderService {
     }
 
     public PageResult<OrderVO> selectList(String cid, SearchOrderDTO searchOrderDTO, Integer page, Integer rows){
+        PageHelper.startPage(page, rows);
         List<OrderVO> list = indentMapper.selectList(cid, searchOrderDTO.getTitle(), searchOrderDTO.getStatus(),
                 searchOrderDTO.getCreateTimeRangeBefore(), searchOrderDTO.getCreateTimeRangeAfter(),
                 searchOrderDTO.getPayTimeRangeBefore(), searchOrderDTO.getPayTimeRangeAfter());
         return new PageResultFactory<>(list).of();
+    }
+
+    public OrderVO detail(String orderId){
+        return indentMapper.selectDetail(orderId);
     }
 }

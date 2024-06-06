@@ -1,5 +1,6 @@
 package cn.moexc.vcs.domain.goods;
 
+import cn.moexc.vcs.domain.AlterException;
 import cn.moexc.vcs.domain.Utils;
 import lombok.Data;
 
@@ -63,6 +64,10 @@ public class GoodsDomain {
      */
     private Date createTime;
 
+    /**
+     * 新增商品
+     * @param cmd
+     */
     public void create(CreateGoodsCommand cmd){
         this.id = Utils.genUUID();
         this.title = cmd.getTitle();
@@ -77,6 +82,10 @@ public class GoodsDomain {
         this.createTime = new Date();
     }
 
+    /**
+     * 修改商品
+     * @param cmd
+     */
     public void update(UpdateGoodsCommand cmd){
         this.title = cmd.getTitle();
         this.photo = cmd.getPhoto();
@@ -88,16 +97,43 @@ public class GoodsDomain {
         this.quantity = cmd.getQuantity();
     }
 
+    /**
+     * 上架
+     */
     public void up(){
         this.status = "03";
     }
 
+    /**
+     * 下架
+     */
     public void down(){
         this.status = "04";
     }
 
+    /**
+     * 删除
+     */
     public void delete(){
         this.status = "05";
+    }
+
+    /**
+     * 创建订单减库存
+     * @param count
+     */
+    public void createOrder(Integer count){
+        if (!"03".equals(this.status)) throw new AlterException("商品暂不支持购买");
+        this.quantity -= count;
+        if (this.quantity < 0) throw new AlterException("购买数量超出库存");
+    }
+
+    /**
+     * 取消订单加库存
+     * @param count
+     */
+    public void cancelOrder(Integer count){
+        this.quantity += count;
     }
 
 }

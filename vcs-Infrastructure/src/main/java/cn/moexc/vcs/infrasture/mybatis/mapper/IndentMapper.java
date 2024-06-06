@@ -24,4 +24,6 @@ public interface IndentMapper {
                              @Param("createTimeRangeAfter") String createTimeRangeAfter,
                              @Param("payTimeRangeBefore") String payTimeRangeBefore,
                              @Param("payTimeRangeAfter") String ayTimeRangeAfter);
+
+    OrderVO selectDetail(@Param("orderId") String orderId);
 }

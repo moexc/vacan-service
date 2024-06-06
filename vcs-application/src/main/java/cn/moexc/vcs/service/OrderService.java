@@ -1,13 +1,17 @@
 package cn.moexc.vcs.service;
 
+import cn.moexc.vcs.domain.goods.GoodsDomain;
+import cn.moexc.vcs.domain.goods.GoodsDomainRepository;
 import cn.moexc.vcs.domain.order.CreateOrderCommand;
 import cn.moexc.vcs.domain.order.OrderDomain;
 import cn.moexc.vcs.domain.order.OrderDomainRepository;
-import cn.moexc.vcs.infrasture.queryresult.Goods4CreateOrder;
 import cn.moexc.vcs.service.cmdfactory.CreaterOrderCmdFactory;
+import cn.moexc.vcs.service.config.LockerException;
 import cn.moexc.vcs.service.dto.CreateOrderDTO;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService implements RocketMQListener<String> {
 
     private final OrderDomainRepository orderDomainRepository;
+    private final GoodsDomainRepository goodsDomainRepository;
+    private final RedissonClient redissonClient;
 
-    public OrderService(OrderDomainRepository orderDomainRepository) {
+    public OrderService(OrderDomainRepository orderDomainRepository,
+                        GoodsDomainRepository goodsDomainRepository,
+                        RedissonClient redissonClient) {
         this.orderDomainRepository = orderDomainRepository;
+        this.goodsDomainRepository = goodsDomainRepository;
+        this.redissonClient = redissonClient;
     }
 
     /**
@@ -29,13 +39,24 @@ public class OrderService implements RocketMQListener<String> {
      */
     @Transactional(rollbackFor = Exception.class)
     public String create(CreateOrderDTO createOrderDTO, String cid){
-//        OrderDomain orderDomain = new OrderDomain();
-//        final Goods4CreateOrder goods4CreateOrder = goodsEntityRepository.selectGoods4CreateOrder(createOrderDTO.getShopId());
-//        CreateOrderCommand cmd = CreaterOrderCmdFactory.gen(createOrderDTO, goods4CreateOrder, cid);
-//        String orderId = orderDomain.create(cmd);
-//        orderDomainRepository.save(orderDomain);
-//        return orderId;
-        return null;
+        final String goodsId = createOrderDTO.getShopId();
+
+        RLock lock = redissonClient.getLock(goodsId);
+        if (!lock.tryLock()) throw new LockerException();
+        try{
+            GoodsDomain goodsDomain = goodsDomainRepository.byId(goodsId);
+            CreateOrderCommand cmd = CreaterOrderCmdFactory.gen(createOrderDTO, goodsDomain, cid);
+
+            goodsDomain.createOrder(createOrderDTO.getQuantity());
+            goodsDomainRepository.save(goodsDomain);
+
+            OrderDomain orderDomain = new OrderDomain();
+            String orderId = orderDomain.create(cmd);
+            orderDomainRepository.save(orderDomain);
+            return orderId;
+        }finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -46,8 +67,23 @@ public class OrderService implements RocketMQListener<String> {
     @Transactional(rollbackFor = Exception.class)
     public void cancelOne(String orderId, String cid){
         OrderDomain orderDomain = orderDomainRepository.byId(orderId);
-        orderDomain.cancel(cid);
-        orderDomainRepository.save(orderDomain);
+
+        final String goodsId =  orderDomain.getGoodsId();
+        RLock lockOrder = redissonClient.getLock(orderId);
+        RLock lockGoods = redissonClient.getLock(goodsId);
+        RLock lock = redissonClient.getMultiLock(lockGoods, lockOrder);
+        if (!lock.tryLock()) throw new LockerException();
+        try{
+            GoodsDomain goodsDomain = goodsDomainRepository.byId(goodsId);
+
+            orderDomain.cancel(cid);
+            orderDomainRepository.save(orderDomain);
+
+            goodsDomain.cancelOrder(orderDomain.getQuantity());
+            goodsDomainRepository.save(goodsDomain);
+        }finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -93,7 +129,19 @@ public class OrderService implements RocketMQListener<String> {
         if (!"00".equals(orderDomain.getStatus())){
             return;
         }
-        orderDomain.expired();
-        orderDomainRepository.save(orderDomain);
+        final String goodsId = orderDomain.getGoodsId();
+        RLock lockOrder = redissonClient.getLock(orderId);
+        RLock lockGoods = redissonClient.getLock(goodsId);
+        RLock lock = redissonClient.getMultiLock(lockOrder, lockGoods);
+        if (!lock.tryLock()) throw new LockerException();
+        try{
+            GoodsDomain goodsDomain = goodsDomainRepository.byId(goodsId);
+            goodsDomain.cancelOrder(orderDomain.getQuantity());
+
+            orderDomain.expired();
+            orderDomainRepository.save(orderDomain);
+        }finally {
+            lock.unlock();
+        }
     }
 }

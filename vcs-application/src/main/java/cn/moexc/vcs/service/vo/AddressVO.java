@@ -8,9 +8,7 @@ import lombok.Setter;
 @Setter
 public class AddressVO {
     private String id;
-    private String province;
     private String address;
-    private String detailed;
     private String postCode;
     private String isdefault;
 

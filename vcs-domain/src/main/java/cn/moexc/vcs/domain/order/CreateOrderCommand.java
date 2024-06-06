@@ -17,6 +17,4 @@ public class CreateOrderCommand {
     private String title;
     private String photo;
     private BigDecimal price;
-    private Integer goodsQuantity;
-    private String status;
 }

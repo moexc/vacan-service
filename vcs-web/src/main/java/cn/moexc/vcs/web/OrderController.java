@@ -17,7 +17,8 @@ public class OrderController {
     private final OrderService orderService;
     private final QueryOrderService queryOrderService;
 
-    public OrderController(OrderService orderService, QueryOrderService queryOrderService) {
+    public OrderController(OrderService orderService,
+                           QueryOrderService queryOrderService) {
         this.orderService = orderService;
         this.queryOrderService = queryOrderService;
     }
@@ -36,17 +37,26 @@ public class OrderController {
         return R.success(orderId);
     }
 
-    @PutMapping("/{id}")
-    public R put(@PathVariable("id") String orderId,
-                 @RequestParam("operation") String operation,
-                 @Auth User user){
-        if (operation.equals("CancelOrder")){
-            orderService.cancelOne(orderId, user.getUserId());
-        }else if (operation.equals("Deliver")){
-            orderService.deliver(orderId);
-        }else if (operation.equals("Accept")){
-            orderService.accept(orderId);
-        }
+    @GetMapping("/{id}")
+    public R detail(@PathVariable("id") String orderId){
+        return R.success(queryOrderService.detail(orderId));
+    }
+
+    @PutMapping("/{id}/cancel")
+    public R cancel(@PathVariable("id") String orderId, @Auth User user){
+        orderService.cancelOne(orderId, user.getUserId());
+        return R.success();
+    }
+
+    @PutMapping("/{id}/deliver")
+    public R deliver(@PathVariable("id") String orderId, @Auth User user){
+        orderService.deliver(orderId);
+        return R.success();
+    }
+
+    @PutMapping("/{id}/accept")
+    public R accept(@PathVariable("id") String orderId, @Auth User user){
+        orderService.accept(orderId);
         return R.success();
     }
 

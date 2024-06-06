@@ -5,10 +5,9 @@ import cn.moexc.vcs.infrasture.mybatis.entity.Indent;
 import org.springframework.beans.BeanUtils;
 
 public class OrderDomainFactory{
-    public static OrderDomain genDomain(Indent indentEntity, Integer goodsQuantity) {
+    public static OrderDomain genDomain(Indent indentEntity) {
         OrderDomain domain = new OrderDomain();
         BeanUtils.copyProperties(indentEntity, domain);
-        domain.setGoodsQuantity(goodsQuantity);
         return domain;
     }
 

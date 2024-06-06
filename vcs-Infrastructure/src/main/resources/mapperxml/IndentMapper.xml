@@ -79,9 +79,9 @@
 
   <sql id="OrderVO_Column_List">
     id, customer_id as customerId, goods_id as goodsId, title, photo, price, quantity, amount, address, `status`,
-    UNIX_TIMESTAMP(create_time) as createTime, UNIX_TIMESTAMP(pay_time) as payTime, UNIX_TIMESTAMP(delivery_time) as deliveryTime,
-    UNIX_TIMESTAMP(accept_time) as acceptTime, UNIX_TIMESTAMP(cancel_time) as cancelTime, UNIX_TIMESTAMP(auto_cancel_time) as autoCancelTime,
-    UNIX_TIMESTAMP(delete_time) as deleteTime
+    UNIX_TIMESTAMP(create_time) * 1000 as createTime, UNIX_TIMESTAMP(pay_time) * 1000 as payTime, UNIX_TIMESTAMP(delivery_time) * 1000 as deliveryTime,
+    UNIX_TIMESTAMP(accept_time) * 1000 as acceptTime, UNIX_TIMESTAMP(cancel_time) * 1000 as cancelTime, UNIX_TIMESTAMP(auto_cancel_time) * 1000 as autoCancelTime,
+    UNIX_TIMESTAMP(delete_time) * 1000 as deleteTime
   </sql>
 
   <select id="selectList" resultType="cn.moexc.vcs.infrasture.queryresult.OrderVO">
@@ -109,5 +109,12 @@
       and pay_time <![CDATA[ < ]]> STR_TO_DATE(#{payTimeRangeAfter,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
     </if>
     order by create_time desc
+  </select>
+
+  <select id="selectDetail" resultType="cn.moexc.vcs.infrasture.queryresult.OrderVO">
+    select
+    <include refid="OrderVO_Column_List" />
+    from indent
+    where id = #{orderId,jdbcType=VARCHAR}
   </select>
 </mapper>

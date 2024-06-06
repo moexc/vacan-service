@@ -1,25 +1,24 @@
 package cn.moexc.vcs.service.cmdfactory;
 
+import cn.moexc.vcs.domain.goods.GoodsDomain;
 import cn.moexc.vcs.domain.order.CreateOrderCommand;
 import cn.moexc.vcs.infrasture.queryresult.Goods4CreateOrder;
 import cn.moexc.vcs.service.dto.CreateOrderDTO;
 
 public class CreaterOrderCmdFactory {
 
-    public static CreateOrderCommand gen(CreateOrderDTO createOrderDTO, Goods4CreateOrder goods4CreateOrder, String cid){
+    public static CreateOrderCommand gen(CreateOrderDTO createOrderDTO, GoodsDomain goodsDomain, String cid){
         CreateOrderCommand cmd = new CreateOrderCommand();
         cmd.setCustomerId(cid);
         cmd.setQuantity(createOrderDTO.getQuantity());
         cmd.setAddress(createOrderDTO.getAddress());
-        if (goods4CreateOrder == null){
+        if (goodsDomain == null){
             return cmd;
         }
-        cmd.setGoodsId(goods4CreateOrder.getGoodsId());
-        cmd.setTitle(goods4CreateOrder.getTitle());
-        cmd.setPhoto(goods4CreateOrder.getPhoto());
-        cmd.setPrice(goods4CreateOrder.getPrice());
-        cmd.setGoodsQuantity(goods4CreateOrder.getQuantity());
-        cmd.setStatus(goods4CreateOrder.getStatus());
+        cmd.setGoodsId(goodsDomain.getId());
+        cmd.setTitle(goodsDomain.getTitle());
+        cmd.setPhoto(goodsDomain.getPhoto());
+        cmd.setPrice(goodsDomain.getPrice());
         return cmd;
     }
 
