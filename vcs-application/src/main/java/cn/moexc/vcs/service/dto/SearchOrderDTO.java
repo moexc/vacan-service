@@ -24,12 +24,4 @@ public class SearchOrderDTO {
      * 下单时间止
      */
     private String createTimeRangeAfter;
-    /**
-     * 付款时间起
-     */
-    private String payTimeRangeBefore;
-    /**
-     * 付款时间止
-     */
-    private String payTimeRangeAfter;
 }

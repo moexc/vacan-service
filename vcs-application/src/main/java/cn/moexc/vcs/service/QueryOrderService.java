@@ -22,8 +22,7 @@ public class QueryOrderService {
     public PageResult<OrderVO> selectList(String cid, SearchOrderDTO searchOrderDTO, Integer page, Integer rows){
         PageHelper.startPage(page, rows);
         List<OrderVO> list = indentMapper.selectList(cid, searchOrderDTO.getTitle(), searchOrderDTO.getStatus(),
-                searchOrderDTO.getCreateTimeRangeBefore(), searchOrderDTO.getCreateTimeRangeAfter(),
-                searchOrderDTO.getPayTimeRangeBefore(), searchOrderDTO.getPayTimeRangeAfter());
+                searchOrderDTO.getCreateTimeRangeBefore(), searchOrderDTO.getCreateTimeRangeAfter());
         return new PageResultFactory<>(list).of();
     }
 

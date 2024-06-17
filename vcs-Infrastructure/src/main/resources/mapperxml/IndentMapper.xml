@@ -91,7 +91,7 @@
     where customer_id = #{cid,jdbcType=VARCHAR}
     and status != '06'
     <if test="title != null and title != ''">
-      and title like '%'|| #{title,jdbcType=VARCHAR} ||'%'
+      and title like concat('%', #{title,jdbcType=VARCHAR}, '%')
     </if>
     <if test="status != null and status != ''">
       and status = #{status,jdbcType=VARCHAR}
@@ -101,12 +101,6 @@
     </if>
     <if test="createTimeRangeAfter != null and createTimeRangeAfter != ''">
       and create_time <![CDATA[ < ]]> STR_TO_DATE(#{createTimeRangeAfter,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
-    </if>
-    <if test="payTimeRangeBefore != null and payTimeRangeBefore != ''">
-      and pay_time <![CDATA[ > ]]> STR_TO_DATE(#{payTimeRangeBefore,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
-    </if>
-    <if test="payTimeRangeAfter != null and payTimeRangeAfter != ''">
-      and pay_time <![CDATA[ < ]]> STR_TO_DATE(#{payTimeRangeAfter,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
     </if>
     order by create_time desc
   </select>

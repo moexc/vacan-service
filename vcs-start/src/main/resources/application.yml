@@ -10,7 +10,7 @@ spring:
       max-request-size: 1000MB
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://172.26.83.151:3306/vacan?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
+    url: jdbc:mysql://192.168.10.23:3306/vacan?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
     username: root
     password: qixinbaotest
   jpa:
@@ -44,7 +44,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 rocketmq:
-  name-server: 172.26.82.175:9876
+  name-server: 172.18.0.2:9876
   producer:
     group: vcs
 
@@ -72,7 +72,7 @@ alipay:
   format: json
   charset: utf-8
   signType: RSA2
-  notifyUrl: http://dj9a3w.natappfree.cc/vcs/api/pay/async
+  notifyUrl: http://98hyrm.natappfree.cc/vcs/api/pay/async
 
 bid:
   engine-server: http://localhost:8081/bid
